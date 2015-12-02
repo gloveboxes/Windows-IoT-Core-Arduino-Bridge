@@ -7,13 +7,12 @@
 Adafruit_NeoPixel pixels;
 unsigned short numPixels = 0;  // How many NeoPixels are attached to the Arduino?
 
-#define Pin_Servo 8
 
 /* Create object for servo motor */
 Servo MyServo;
 bool ServoInitialised = false;
-byte oldPosition = 0;
-int newPosition = 70;
+//byte oldPosition = 0;
+//int newPosition = 70;
 
 enum ArduinoCmd : byte
 {
@@ -62,6 +61,12 @@ void requestEvent() {
 void I2CReceived(int NumberOfBytes)
 {
   int temp;
+
+//data format
+//byte 0 = Command
+//byte 1-2 = index
+//byte 3-5 = arbitory could be red, green, blue for a neopixel or set neopixel string size etc or pin numnders for neopixel or servo
+  
   byte data[6];
   unsigned short index = 0;
   
@@ -75,7 +80,6 @@ void I2CReceived(int NumberOfBytes)
   for (int b = 0; b < 6; b++){
     data[b] = Wire.read();
   }
-
 
 
   cmd = (ArduinoCmd)data[0];  // S = Set pixel, // R = Render Frame
